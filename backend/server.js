@@ -3,9 +3,11 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const dotenv = require("dotenv");
 
-// Set custom DNS servers to resolve MongoDB Atlas mongodb+srv connection issues
-const dns = require("dns");
-dns.setServers(["1.1.1.1", "8.8.8.8"]);
+// Set custom DNS servers to resolve MongoDB Atlas mongodb+srv connection issues in development
+if (process.env.NODE_ENV !== "production") {
+  const dns = require("dns");
+  dns.setServers(["1.1.1.1", "8.8.8.8"]);
+}
 
 dotenv.config();
 
