@@ -23,7 +23,7 @@ const Navbar = () => {
   };
 
   return (
-<header className="sticky top-0 z-50 border-b border-white/10 bg-black/50 backdrop-blur-2xl shadow-[0_10px_40px_rgba(0,0,0,0.25)]">
+<header className="sticky top-0 z-50 border-b border-white/10 bg-black/50 backdrop-blur-2xl ">
       <div className="max-w-7xl mx-auto h-10 px-1 flex items-center justify-between">
         {/* Logo */}
         <Link
