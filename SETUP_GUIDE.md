@@ -35,16 +35,13 @@ MongoDB Atlas provides a fully managed, free cloud database. This is where `mong
 
 ---
 
-## Step 2: Set Up Gmail App Passwords (For Nodemailer)
+## Step 2: Set Up Brevo Email API (For Notifications)
 
-To send emails automatically (booking confirmations), you need to configure an App Password for your Gmail account. Normal passwords won't work because of 2FA.
+To send transactional emails (booking confirmations and OTPs), you need to configure Brevo.
 
-1. Go to your [Google Account Manage page](https://myaccount.google.com/).
-2. Navigate to the **Security** tab on the left.
-3. Under "How you sign in to Google", select **2-Step Verification** and make sure it is turned ON.
-4. Once ON, go back to the Security tab, search for **App Passwords** in the search bar.
-5. Generate a new App Password (select "Other" and name it "Evenza").
-6. Copy the 16-character password generated.
+1. Go to [Brevo](https://www.brevo.com/) and sign up for a free account.
+2. Verify your sender email address under **Senders & IPs > Senders** in your Brevo account dashboard.
+3. Generate a new v3 API key under **SMTP & API > API Keys**. Copy this key.
 
 ---
 
@@ -59,9 +56,10 @@ MONGO_URI=mongodb+srv://evenzadmin:your_actual_password@cluster0.xxxxx.mongodb.n
 # This can be any random string, but keep it secure.
 JWT_SECRET=supersecretjwtkey_evenza
 
-# Email Setup Configured using Step 2
-EMAIL_USER=yourgmail@gmail.com
-EMAIL_PASS=the_16_character_app_password
+# Brevo API configuration using Step 2
+BREVO_API_KEY=your_brevo_api_key_here
+BREVO_SENDER_EMAIL=your_verified_sender_email@domain.com
+BREVO_SENDER_NAME=Evenza
 
 PORT=5000
 ```

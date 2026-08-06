@@ -17,7 +17,7 @@ Evenza is a full-stack MERN application that allows users to seamlessly browse, 
   - All booking requests (both free and paid) enter a secure 'Pending' queue for Admin verification.
   - Seat availability accurately updates and securely validates against overbooking logic.
 - **Admin Analytics Dashboard**: Track live data such as Pending Requests, Total Revenue, and Total Confirmed Paid Attendees directly from the admin panel.
-- **Email Notifications**: Automated email delivery upon successful booking confirmation using Nodemailer.
+- **Email Notifications**: Automated email delivery upon successful booking confirmation using the Brevo Email API.
 - **Sleek UI/UX**: Built entirely with React, Tailwind CSS, and polished with micro-interactions.
 
 ---
@@ -36,12 +36,11 @@ Navigate to `backend/.env` and fill in the necessary keys:
 ```env
 MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=supersecretjwtkey_evenza
-EMAIL_USER=your_gmail_address
-EMAIL_PASS=your_gmail_app_password
+BREVO_API_KEY=your_brevo_api_key
+BREVO_SENDER_EMAIL=your_verified_sender_email
+BREVO_SENDER_NAME=Evenza
 PORT=5000
 ```
-
-> **Note**: For `EMAIL_PASS`, you need to generate an "App Password" from your Google Account settings, standard passwords won't work due to 2FA.
 
 ### 2. Run from Outer Folder (Single Terminal)
 
