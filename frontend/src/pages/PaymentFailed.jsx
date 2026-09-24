@@ -1,19 +1,34 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FaTimesCircle } from 'react-icons/fa';
+import { FaTimesCircle, FaRedoAlt, FaHome } from 'react-icons/fa';
 
 const PaymentFailed = () => {
     return (
-        <div className="min-h-[70vh] flex flex-col items-center justify-center p-4">
-            <div className="bg-white p-10 rounded-3xl shadow-2xl max-w-md w-full text-center border-t-8 border-red-500 transform transition-all hover:-translate-y-1">
-                <FaTimesCircle className="text-red-500 text-7xl mx-auto mb-6 drop-shadow-sm" />
-                <h1 className="text-4xl font-black text-gray-900 mb-4">Booking Failed</h1>
-                <p className="text-gray-500 mb-8 text-lg">We couldn't process your payment. Please ensure your payment details are correct and try again.</p>
-                <div className="space-y-4">
-                    <Link to="/" className="block w-full bg-red-500 hover:bg-red-600 text-white font-bold py-4 px-6 rounded-xl transition shadow-lg hover:shadow-xl">
-                        Return to Events
+        <div className="min-h-[80vh] flex flex-col items-center justify-center p-4 relative z-10">
+            {/* Background elements */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-rose-400 rounded-full mix-blend-multiply filter blur-[128px] opacity-20 -z-10 animate-blob"></div>
+
+            <div className="glass p-10 sm:p-14 rounded-[3rem] shadow-2xl max-w-lg w-full text-center border border-white/50 relative overflow-hidden animate-scale-in">
+                {/* Top border highlight */}
+                <div className="absolute top-0 left-0 w-full h-3 bg-gradient-to-r from-rose-400 to-rose-600"></div>
+
+                <div className="relative inline-block mb-8">
+                    <div className="absolute inset-0 bg-rose-400 blur-2xl opacity-40 rounded-full"></div>
+                    <FaTimesCircle className="relative text-rose-500 text-8xl mx-auto drop-shadow-md animate-pulse" style={{ animationDuration: '2s' }} />
+                </div>
+
+                <h1 className="text-4xl sm:text-5xl font-display font-black text-slate-900 mb-4 tracking-tight">Booking Failed</h1>
+                <p className="text-slate-500 mb-10 text-lg font-medium leading-relaxed">
+                    We couldn't process your payment. Please ensure your payment details are correct and try again.
+                </p>
+
+                <div className="space-y-4 flex flex-col items-center">
+                    <Link to="/" className="w-full sm:w-11/12 group flex items-center justify-center gap-3 bg-rose-500 hover:bg-rose-600 text-white font-bold py-4 px-8 rounded-2xl transition-all duration-300 shadow-lg shadow-rose-500/30 hover:shadow-xl hover:-translate-y-1 text-lg">
+                        <FaRedoAlt className="text-rose-100 group-hover:rotate-180 transition-transform duration-500" />
+                        Try Again
                     </Link>
-                    <Link to="/dashboard" className="block w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-4 px-6 rounded-xl transition">
+                    <Link to="/dashboard" className="w-full sm:w-11/12 flex items-center justify-center gap-3 bg-white/50 hover:bg-white text-slate-700 font-bold py-4 px-8 rounded-2xl transition-all duration-300 border border-slate-200 hover:border-slate-300">
+                        <FaHome className="text-slate-400" />
                         Go to Dashboard
                     </Link>
                 </div>

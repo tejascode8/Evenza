@@ -1,115 +1,115 @@
-# Complete Setup Guide: MongoDB Atlas & Application Configuration
+# Complete Setup & Integration Guide: Evenza
 
-This guide will walk you through exactly how to set up your backend dependencies, including MongoDB Atlas (the remote cloud database), followed by starting up the application.
-
----
-
-## Step 1: Set Up MongoDB Atlas (Your Database)
-
-MongoDB Atlas provides a fully managed, free cloud database. This is where `mongoose` will store all your `Users`, `Events`, and `Bookings`.
-
-1. **Sign Up / Log In**:
-   - Go to [MongoDB Atlas](https://www.mongodb.com/cloud/atlas/register) and create a free account.
-2. **Create a Cluster**:
-   - Once logged in, click **"Build a Database"** or **"Create Cluster"**.
-   - Select the **"M0 Sandbox" (Free Tier)** option.
-   - Choose a provider (e.g., AWS, Google Cloud) and click **Create** (no credit card required).
-3. **Set Up Database Access (Credentials)**:
-   - On the left sidebar, click **"Database Access"**.
-   - Click **"Add New Database User"**.
-   - Choose **Password** authentication.
-   - Set a Username (e.g., `evenzadmin`) and a Password (e.g., `evenzapassword`). **Remember these.**
-   - Click **Add User**.
-4. **Set Up Network Access (IP Whitelist)**:
-   - On the left sidebar, click **"Network Access"**.
-   - Click **"Add IP Address"**.
-   - Choose **"Allow Access from Anywhere"** (this sets the IP to `0.0.0.0/0`) so that your local machine (and later, Vercel/Render) can connect to it.
-   - Click **Confirm**.
-5. **Get Your Connection String**:
-   - On the left sidebar, click **"Database"** (under Deployments).
-   - Click the **"Connect"** button on your new cluster.
-   - Choose **"Drivers"** (Connect your application).
-   - Copy the connection string provided. It will look something like this:
-     `mongodb+srv://evenzadmin:<password>@cluster0.xxxxx.mongodb.net/?retryWrites=true&w=majority`
-   - **Important**: Replace `<password>` in the string with the actual password you created in Step 3. (Do not include the `< >` brackets).
+This guide walks you through setting up MongoDB Atlas (Cloud Database), the Brevo Email API (Transactional Notifications), environment secrets, and running end-to-end API tests with Postman.
 
 ---
 
-## Step 2: Set Up Brevo Email API (For Notifications)
+## Step 1: Set Up MongoDB Atlas (Cloud Database)
 
-To send transactional emails (booking confirmations and OTPs), you need to configure Brevo.
+MongoDB Atlas provides a managed cloud database for storing `Users`, `Events`, `Bookings`, and `OTPs`.
 
-1. Go to [Brevo](https://www.brevo.com/) and sign up for a free account.
-2. Verify your sender email address under **Senders & IPs > Senders** in your Brevo account dashboard.
-3. Generate a new v3 API key under **SMTP & API > API Keys**. Copy this key.
+1. **Create an Account**:
+   * Visit [MongoDB Atlas](https://www.mongodb.com/cloud/atlas/register) and register for a free account.
+2. **Deploy a Free Cluster**:
+   * Click **"Create Database"** / **"Build a Database"**.
+   * Select the **"M0 (Free Tier)"** option.
+   * Choose your preferred cloud provider and region, then click **Create**.
+3. **Configure Database Credentials**:
+   * Under **Security** in the left sidebar, click **"Database Access"**.
+   * Click **"Add New Database User"**.
+   * Select **Password Authentication**. Set a Username (e.g. `evenza_admin`) and a secure Password.
+   * Assign the role `Read and write to any database`, then click **Add User**.
+4. **Set Up Network IP Whitelist**:
+   * Under **Security**, click **"Network Access"**.
+   * Click **"Add IP Address"** -> **"Allow Access from Anywhere"** (`0.0.0.0/0`) to allow connections from your local development environment and cloud hosting providers.
+   * Click **Confirm**.
+5. **Obtain Connection URI**:
+   * Go to **Database** (under Deployments). Click **"Connect"** on your cluster.
+   * Select **Drivers** (Node.js).
+   * Copy the connection string provided:
+     ```text
+     mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net/evenza?retryWrites=true&w=majority
+     ```
+   * Replace `<username>` and `<password>` with your actual credentials.
 
 ---
 
-## Step 3: Configure the Environment Variables (`.env`)
+## Step 2: Set Up Brevo Email API (Transactional 2FA & Passes)
 
-Now that you have your credentials, you need to plug them into the backend. Open the file located at `backend/.env` and paste your values:
+Evenza uses the Brevo (Sendinblue) REST API v3 to dispatch 2FA verification codes and HTML digital boarding passes.
+
+1. Sign up for a free account at [Brevo](https://www.brevo.com/).
+2. Verify your sender identity under **Senders & IPs > Senders** (e.g. `yourname@domain.com` or your verified email).
+3. Generate a new API Key under **SMTP & API > API Keys**. Copy your key (`xkeysib-...`).
+
+> **Note on Local Development**: If you do not have Brevo configured, the application will still function seamlessly — all generated 2FA OTP codes are automatically logged directly to your server console for instant copying.
+
+---
+
+## Step 3: Configure Environment Variables
+
+Create `backend/.env` from the provided template:
 
 ```env
-# Paste the MongoDB string you generated (make sure you swapped the password)
-MONGO_URI=mongodb+srv://evenzadmin:your_actual_password@cluster0.xxxxx.mongodb.net/evenza?retryWrites=true&w=majority
+# MongoDB Connection String
+MONGO_URI=mongodb+srv://evenza_admin:your_password@cluster0.xxxxx.mongodb.net/evenza?retryWrites=true&w=majority
 
-# This can be any random string, but keep it secure.
-JWT_SECRET=supersecretjwtkey_evenza
+# JWT Authentication Secret (Any long random string)
+JWT_SECRET=evenza_secure_jwt_token_secret_key_2026
 
-# Brevo API configuration using Step 2
+# Server Port
+PORT=5000
+
+# Brevo Transactional Email Service
 BREVO_API_KEY=your_brevo_api_key_here
 BREVO_SENDER_EMAIL=your_verified_sender_email@domain.com
 BREVO_SENDER_NAME=Evenza
-
-PORT=5000
 ```
 
 ---
 
-## Step 4: Run the Application!
+## Step 4: Seed Database & Provision Admin Account
 
-### Start the Backend
-
-Open a terminal inside the `/backend` folder:
+From the project root:
 
 ```bash
-cd backend
-npm run dev
+# Install all workspace dependencies
+npm run setup
+
+# Seed 25 realistic users and diverse events with active occupancies
+npm run seed
+
+# Create or reset the master Admin credentials
+npm run seed:admin
 ```
 
-If you configured your `MONGO_URI` correctly, the terminal will say:
-
-> `Server running on port 5000`
-> `MongoDB Connected`
-
-### Start the Frontend
-
-Open a new terminal inside the `/frontend` folder:
-
-```bash
-cd frontend
-npm run dev
-```
-
-It will provide a local URL (e.g., `http://localhost:5173/`). Open this in your browser.
+**Seed Credentials**:
+* **Admin**: `admin@evenza.com` / `Admin@12345`
+* **Demo User**: `demo@evenza.com` / `@demo$123`
 
 ---
 
-## Step 5: Test the API with Postman
+## Step 5: Run Local Development Servers
 
-I have included an export file named `Evenza_Postman_Collection.json` in the root of the project. This contains every API route pre-configured.
+```bash
+# Concurrently runs Express API (port 5000) and Vite React Frontend (port 5173)
+npm run dev
+```
+
+Open your browser at `http://localhost:5173/`.
+
+---
+
+## Step 6: Test APIs with Postman
+
+A complete Postman collection is included at `Evenza_API_Test/Evenza_Postman_Collection.json`.
 
 1. Open [Postman](https://www.postman.com/downloads/).
 2. Click **Import** (top left).
-3. Drag and drop the `Evenza_Postman_Collection.json` file into the window.
-4. The collection will act as an end-to-end script utilizing environment variables:
-   - Run the **Register User** request, then trigger **Verify Account OTP**, to activate your first admin/user account.
-   - Run the **Login** request. (This will automatically save your auth token into Postman).
-   - Run **Create Event (Admin)**. This will automatically save the `event_id`.
-   - Run **Send Booking OTP Request** to trigger an OTP code email to yourself.
-   - Run **Verify & Request Booking** (using your emailed OTP) to put your ticket request in the 'Pending' queue. This will save your `booking_id`.
-   - Run **Confirm Booking (Admin - Paid)** to finalize the order, deduct a seat, and trigger a confirmation email.
-   - Or test **Cancel/Reject Booking (Admin/User)**.
-
-You're done! The full user to admin pipeline is ready to be tested both on the frontend React App and in Postman.
-
+3. Select `Evenza_API_Test/Evenza_Postman_Collection.json`.
+4. Test the full booking and management lifecycle:
+   * **Register User** &rarr; **Verify Account OTP** (activates account).
+   * **Login** (automatically sets the Bearer Auth token).
+   * **Create Event (Admin)** (creates listing and stores `event_id`).
+   * **Send Booking OTP Request** &rarr; **Verify & Request Booking** (submits ticket request to pending queue).
+   * **Confirm Booking (Admin - Paid)** (confirms pass, decrements seat, dispatches pass email).

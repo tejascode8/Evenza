@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { Navigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+import LoadingScreen from './LoadingScreen';
 
 const ProtectedRoute = ({ children, adminOnly = false }) => {
     const { user, loading } = useContext(AuthContext);
@@ -8,9 +9,10 @@ const ProtectedRoute = ({ children, adminOnly = false }) => {
     // If AuthContext is still loading the user state from localStorage
     if (loading) {
         return (
-            <div className="text-center py-20 text-xl font-semibold">
-                Loading...
-            </div>
+            <LoadingScreen
+                message="Verifying Security Session..."
+                subtitle="Authenticating access permissions and cryptographic tokens..."
+            />
         );
     }
 

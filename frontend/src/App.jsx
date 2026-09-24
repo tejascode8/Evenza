@@ -13,10 +13,10 @@ import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
     return (
-        <Router>
-            <div className="min-h-screen bg-gray-50 flex flex-col">
+        <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+            <div className="min-h-screen bg-slate-50 flex flex-col">
                 <Navbar />
-                <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <main className="flex-grow w-full">
                     <Routes>
                         <Route path="/" element={<Home />} />
                         <Route path="/events/:slug" element={<EventDetail />} />

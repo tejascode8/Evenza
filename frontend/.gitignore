@@ -1,2 +1,83 @@
-node_modules
+# ==============================================================================
+# Evenza - Frontend .gitignore (React / Vite / Tailwind CSS)
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# 1. Dependencies & Integrity Caches
+# ------------------------------------------------------------------------------
+node_modules/
+.pnp
+.pnp.js
+.npm/
+
+# ------------------------------------------------------------------------------
+# 2. Production Build Outputs
+# ------------------------------------------------------------------------------
+dist/
+dist-ssr/
+build/
+*.local
+
+# ------------------------------------------------------------------------------
+# 3. Environment Variables & Local Secrets (NEVER SHARE PUBLICLY)
+# ------------------------------------------------------------------------------
 .env
+.env.*
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.pem
+*.key
+*.cert
+
+# Always track example configuration templates
+!.env.example
+
+# ------------------------------------------------------------------------------
+# 4. Logs, Diagnostics & Temp Data
+# ------------------------------------------------------------------------------
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Local runtime downloaded reports / export CSVs
+*Guestlist_*.csv
+*Attendee_*.csv
+export*.csv
+*.export.*
+
+# ------------------------------------------------------------------------------
+# 5. Temporary Files, Caches & Scratchpads
+# ------------------------------------------------------------------------------
+temp/
+tmp/
+scratch/
+.scratch/
+*.scratch.*
+scratch.*
+local_notes.*
+notes.local.*
+*.tmp
+*.temp
+*.bak
+*.backup
+*.old
+*~
+.vite/
+.eslintcache
+.stylelintcache
+
+# ------------------------------------------------------------------------------
+# 6. Editor, IDE & OS Files
+# ------------------------------------------------------------------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+[Dd]esktop.ini

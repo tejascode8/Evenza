@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Event = require('../models/Event');
+const { broadcast } = require('../utils/realtime');
 
 exports.getEvents = async (req, res) => {
     try {
@@ -49,6 +50,10 @@ exports.createEvent = async (req, res) => {
             image: image || '',
             createdBy: req.user.id
         });
+
+        // Broadcast real-time event creation to all clients
+        broadcast('EVENT_CREATED', { event });
+
         res.status(201).json(event);
     } catch (error) {
         res.status(500).json({ message: 'Server Error', error: error.message });
@@ -59,6 +64,10 @@ exports.updateEvent = async (req, res) => {
     try {
         const event = await Event.findByIdAndUpdate(req.params.id, req.body, { new: true });
         if (!event) return res.status(404).json({ message: 'Event not found' });
+
+        // Broadcast real-time event update to all clients
+        broadcast('EVENT_UPDATED', { event });
+
         res.json(event);
     } catch (error) {
         res.status(500).json({ message: 'Server Error', error: error.message });
@@ -69,6 +78,10 @@ exports.deleteEvent = async (req, res) => {
     try {
         const event = await Event.findByIdAndDelete(req.params.id);
         if (!event) return res.status(404).json({ message: 'Event not found' });
+
+        // Broadcast real-time event deletion to all clients
+        broadcast('EVENT_DELETED', { eventId: req.params.id });
+
         res.json({ message: 'Event deleted successfully' });
     } catch (error) {
         res.status(500).json({ message: 'Server Error', error: error.message });
